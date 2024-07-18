@@ -1,0 +1,89 @@
+<div  class="w-screen overflow-scroll">
+    <p-table 
+    class="grid"
+    #dt2
+    [value]="records" 
+    
+    [paginator]="true"
+    dataKey="id"
+
+    [rows]="5"
+
+    [totalRecords]="totalRecords"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '10rem' }"
+
+    [rowsPerPageOptions]="[5,10, 25, 50]"
+    [globalFilterFields]="[ 'name']" >
+
+    <ng-template pTemplate="caption" >
+           
+  
+                
+         <div class="grid grid-cols-2 ">
+            <div class="flex justify-start ml-4">
+            <input 
+            class="w-32"
+            pInputText 
+            class="font-light"
+            type="text" 
+            (input)="dt2.filterGlobal($any($event).target.value, 'contains')" 
+            placeholder="Search User"
+            class=" border border-gray-300 inline-block rounded-lg font-normal w-32 ml-2" />
+        </div>
+     
+        <div class="flex justify-end justify-items-center mr-10 " >           
+    
+            <p-dropdown 
+            class=" border border-gray-300 inline-block rounded-lg "
+            [options]="activities" 
+            (onChange)="onSelectionChange($event.value)"
+            ptionLabel="name"
+            placeholder="Workout" />
+         
+        </div>                    
+         </div>          
+                
+        </ng-template>
+        <ng-template pTemplate="header"  class="mt-4 ">
+            <tr>
+                <th pSortableColumn="name" style="width:20%">
+                    Name <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="workouts" style="width:20%">
+                    Workouts <p-sortIcon field="workouts" />
+                </th>
+                <th pSortableColumn="num" style="width:20% ">
+                    Number of Workouts<p-sortIcon field="num" />
+                </th>
+                <th pSortableColumn="time" style="width:20%">
+                    Total Workouts Minutes <p-sortIcon field="time" />
+                </th>
+             
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+               
+                <td>{{ product.name }}</td>
+                <td>
+                    @for (activity of product.workouts;track activity ){
+                        {{activity.type}}
+                        @if (!$last){
+                            <span>,</span>
+                        }
+
+                    }
+                </td>
+                <td name="num">
+                    {{product.workouts.length}}
+                </td>
+                <td>
+                    {{calculate(product.workouts)}}
+
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
