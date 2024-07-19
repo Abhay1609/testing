@@ -22,16 +22,24 @@ export class InputComponent  {
   selectedActivity='';
   username='';
   duration='';
-  constructor(private userService: UserService, private communicationService: CommunicationService){}
+  error=false;
+  constructor(private userService: UserService, private communicationService: CommunicationService){
 
+  }
+  
+  
   onSubmit(){
-
-  return this.userService.addData((userData: number) => {
+    
+   
+  this.userService.addData((userData: number) => {
     this.communicationService.triggerTotalUpdate(userData);
   },{
     name:this.username,
     time:this.duration,
     activity:this.selectedActivity,})
+    this.error=this.userService.error
 }
+
+
 
 }

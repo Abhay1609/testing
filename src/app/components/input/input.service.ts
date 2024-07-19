@@ -4,6 +4,8 @@ import { DATA } from "../../app.models";
 import { userData } from "../../dummyData";
 @Injectable({providedIn:'any'})
 export class UserService{
+        error=false;
+        
         data=userData
          index=-1;
          existingWorkout:{type:string,minutes:number}[]=[]
@@ -25,20 +27,32 @@ export class UserService{
                   break;
                 }
               }
+              if((!isNaN(+data.time) && !isNaN(parseFloat(data.time)))){
               if(this.existingindex!==-1){
                 userData[this.index].workouts[this.existingindex].minutes=+data.time;
                 this.index=-1;
+                this.error=false
               }
               else{
+                
                 userData[this.index].workouts.push({type:data.activity,minutes:+data.time})
+              this.error=false}
+             
+              }
+                else{
+                  this.error=true
+                
               }
             }
             else{
-                if(data.name!=''&&data.activity!=''){
+                if(data.name!=''&&data.activity!=''&&(!isNaN(+data.time) && !isNaN(parseFloat(data.time)))){
                     //console.log(data.activity)
               userData.push({id:userData.length+1,name:data.name,workouts:[{type:data.activity,minutes:+data.time}]})
               
-              this.index=-1;}
+              this.index=-1;
+            this.error=false}else{
+                this.error=true;
+              }
 
             }
             fun1(userData)
